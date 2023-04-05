@@ -38,8 +38,7 @@ class Game{
 	}
 
 	clearPattern(){
-		this.stopPlaying();
-		this.stopRecording();
+
 		for (let i in this.steps){
 			this.steps[i] = null;
 		}
@@ -90,17 +89,26 @@ class Game{
 
 	playPattern(){
 		console.log('playPattern');
-		this.stopPlaying();
 		this.stopRecording();
+
+		if (this.stopPlaying()){
+			return;
+		}
+
 		this.playInterval = setInterval(this.playingPattern, 1000);
 		ui.status("Playing...");
 	}
 
 	recordPattern(){
-		this.stopPlaying();
-		this.stopRecording();
-		ui.status("Programming...")
 		this.clearPattern();
+
+		this.stopPlaying();
+		if (this.stopRecording()){
+			console.log('returning');
+			return;
+		}
+
+		ui.status("Programming...")
 		this.recordingStep = 0;
 
 	}
@@ -115,16 +123,20 @@ class Game{
 			clearInterval(this.playInterval);
 			this.playInterval = null;
 			ui.status("Stopped...");
-			return;
+			return true;
 		}
+		return false;
 	}
 
 	stopRecording(){
+		console.log('stop', this.recordingStep);
 		if (this.recordingStep != null){
+			console.log ('yah');
 			ui.status( this.recordingStep + "/" + this.steps.length + " steps of the pattern programmed.");
 			this.recordingStep = null;
-			return;
+			return true;
 		}
+		return false;
 	}
 
 	switch(id){

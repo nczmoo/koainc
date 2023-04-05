@@ -11,12 +11,12 @@ class UI{
 		$("#" + game.mode).removeClass('btn-outline-dark');
 		for (let padID in game.samples){			
 			this.changePad(padID)
-
-			if (game.samples[padID] == null){
+			$("#pad-" + padID).prop('disabled', false);
+			if (game.samples[padID] == null && game.mode != 'record'){
+				$("#pad-" + padID).prop('disabled', true);
 				continue;
 			}
-
-			$("#pad-" + padID).html(game.samples[padID]);
+			$("#pad-" + padID).html(game.samples[padID].trim());
 		}
 		let txt = '';
 		for (let i in game.steps){
@@ -42,7 +42,7 @@ class UI{
 			}
 			$("#incPatternRecipe").html(txt);
 		}
-		console.log(game.recordingStep);
+		
 		if (game.recordingStep != null){
 			$("#recordPattern").removeClass('btn-outline-danger');
 			$("#recordPattern").addClass('btn-danger');
@@ -64,14 +64,14 @@ class UI{
 	changePad(id){
 
 		if (game.mode != 'record' && game.samples[id] == null){
-			$("#pad-" + id).addClass('empty');
+			$("#pad-" + id).addClass('emptyPad');
 			return;
 		} else if (game.mode != 'record' && game.samples[id] != null){
-			$("#pad-" + id).addClass('filled');
+			$("#pad-" + id).addClass('filledPad');
 			return;
 		}
-		$(".pad").removeClass('filled');
-		$(".pad").removeClass('empty');
+		$(".pad").removeClass('filledPad');
+		$(".pad").removeClass('emptyPad');
 	}
 
 	back(){

@@ -6,6 +6,11 @@ class Config {
         boobee: {
             beep: 1, bop: 1
         },
+        babop:{
+            boobee: 1,
+            bop: 1,
+        }
+        
     };
     mineable = {
         beep: 0,
