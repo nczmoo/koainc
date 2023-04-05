@@ -10,13 +10,19 @@ class UI{
 		$("#" + game.mode).addClass('btn-dark');
 		$("#" + game.mode).removeClass('btn-outline-dark');
 		for (let padID in game.samples){			
+			console.log(padID);
 			this.changePad(padID)
 			$("#pad-" + padID).prop('disabled', false);
-			if (game.samples[padID] == null && game.mode != 'record'){
+			if (game.samples[padID] != null){
+				$("#pad-" + padID).html(game.samples[padID].trim());
+				continue;
+			}
+			if (game.mode != 'record'){ //null by default
 				$("#pad-" + padID).prop('disabled', true);
 				continue;
 			}
-			$("#pad-" + padID).html(game.samples[padID].trim());
+			
+			
 		}
 		let txt = '';
 		for (let i in game.steps){

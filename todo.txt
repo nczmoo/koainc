@@ -1,1 +1,4 @@
-add gameloop basics
+TODO
+    add all new recipes
+    play audio when each thing is played 
+    
