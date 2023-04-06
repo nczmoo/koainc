@@ -1,4 +1,8 @@
 class Config {
+    multiPadsPlaying = true;
+    muteAudio = false;
+    audioPlaying = null;
+    padPlaying = [];
     recipes = {
         babop:{
             boobee: 1,
@@ -93,6 +97,10 @@ class Config {
     stuff = {};
 
     constructor(){
+        for (let i = 0; i < this.numberOfPads; i ++){
+            this.padPlaying[i] = null;
+        }
+
         for(let i in this.mineable){
             this.stuff[i] = this.mineable[i];
         }

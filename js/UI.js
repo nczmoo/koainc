@@ -19,13 +19,10 @@ class UI{
 			if (game.mode != 'record'){ //null by default
 				$("#pad-" + padID).prop('disabled', true);
 				continue;
-			}
-			
-			
+			}			
 		}
 		let txt = '';
-		//for (let i in game.steps){
-		for (let i = 0; i < 16; i++){
+		for (let i in game.steps){		
 			let stepClass = '';
 			if (game.steps[i] != null){
 				stepClass = ' programmed ';

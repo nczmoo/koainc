@@ -77,8 +77,22 @@ class Game{
 			txt += " " + ingredient + ": " + this.config.stuff[ingredient] 
 				+ "(-"  + quantity + ")";
 		}
-
+		this.playAudio(id);
 		ui.status(txt);
+	}
+
+	playAudio(padID){
+		console.log(padID);
+		let filename = 'audio/' + this.samples[padID] + ".mp3";
+		console.log(filename);
+		if (this.config.multiPadsPlaying){
+			this.config.padPlaying[padID] = new Audio(filename);
+			this.config.padPlaying[padID].play();
+			return;
+		}
+
+		this.config.audioPlaying = new Audio(filename);
+		this.config.audioPlaying.play();
 	}
 
 	playingPattern(){

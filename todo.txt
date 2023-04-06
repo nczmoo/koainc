@@ -1,4 +1,6 @@
 TODO
-    add all new recipes
-    play audio when each thing is played 
-    
+    X add all new recipes
+    X play audio when each thing is played 
+    add mute button
+    show unlock requirements in adding pad 
+    BUG: setup three steps and it's just playing the last one. I think it might be playing all of them at the same time.
