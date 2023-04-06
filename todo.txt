@@ -1,6 +1,10 @@
 TODO
     X add all new recipes
     X play audio when each thing is played 
-    add mute button
-    show unlock requirements in adding pad 
-    BUG: setup three steps and it's just playing the last one. I think it might be playing all of them at the same time.
+    X add mute button
+    X show unlock requirements in adding pad 
+    X BUG: setup three steps and it's just playing the last one. I think it might be playing all of them at the same time.
+
+Design
+    While it's mechanically interesting on a very simple level, mechanically, 
+    there becomes an issue when you run out of pads. Lets try pad banks.

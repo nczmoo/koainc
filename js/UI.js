@@ -1,19 +1,30 @@
 class UI{
+	hidingUncraftable = true;
+
 	constructor(){
 
 	}
 	refresh(){
+		
+		$(".changeBank").addClass('btn-outline-info');
+		$(".changeBank").removeClass('btn-info');
+		$(".changeBank").prop('disabled', false);
+		$("#changeBank-" + game.bank).removeClass('btn-outline-info');
+		$("#changeBank-" + game.bank).addClass('btn-info');
+		$("#changeBank-" + game.bank).prop('disabled', true);
 		$(".switcher").removeClass('btn-dark');
 		$(".switcher").addClass('btn-outline-dark');
 		$(".switcher").prop('disabled', false);
 		$("#" + game.mode).prop('disabled', true);
 		$("#" + game.mode).addClass('btn-dark');
 		$("#" + game.mode).removeClass('btn-outline-dark');
-		for (let padID in game.samples){			
+		for (let sampleID = game.bank * 9; sampleID < (game.bank + 1) * 9; sampleID++){	
+			let padID = sampleID - (game.bank * 9);			
 			this.changePad(padID)
 			$("#pad-" + padID).prop('disabled', false);
-			if (game.samples[padID] != null){
-				$("#pad-" + padID).html(game.samples[padID].trim());
+			$("#pad-" + padID).html('&nbsp;');
+			if (game.samples[sampleID] != null){
+				$("#pad-" + padID).html(game.samples[sampleID].trim());
 				continue;
 			}
 			if (game.mode != 'record'){ //null by default
@@ -53,28 +64,38 @@ class UI{
 			$("#recordPattern").addClass('btn-outline-danger');
 			$("#recordPattern").removeClass('btn-danger');
 		}
-
+		$("#playPattern").html('play');
 		if (game.playInterval != null){
+			$("#playPattern").html('stop');
 			$("#playPattern").removeClass('btn-outline-success');
 			$("#playPattern").addClass('btn-success');
 		} else {
 			$("#playPattern").addClass('btn-outline-success');
 			$("#playPattern").removeClass('btn-success');
 		}
-
+		$("#mute").removeClass('btn-secondary');
+		$("#mute").addClass('btn-outline-secondary');
+		if (game.config.muteAudio){
+			$("#mute").addClass('btn-secondary');
+			$("#mute").removeClass('btn-outline-secondary');
+		} 
+			
+		
 	}
 
-	changePad(id){
-
-		if (game.mode != 'record' && game.samples[id] == null){
-			$("#pad-" + id).addClass('emptyPad');
+	changePad(padID){
+		let sampleID = padID + (game.bank * 9);
+		$("#pad-" + padID).removeClass('btn-outline-success');
+		$("#pad-" + padID).removeClass('btn-outline-danger');
+		if (game.mode != 'record' && game.samples[sampleID] == null){
+			$("#pad-" + padID).addClass('btn-outline-danger');
 			return;
-		} else if (game.mode != 'record' && game.samples[id] != null){
-			$("#pad-" + id).addClass('filledPad');
+		} else if (game.mode != 'record' && game.samples[sampleID] != null){
+			$("#pad-" + padID).addClass('btn-outline-success');
 			return;
 		}
-		$(".pad").removeClass('filledPad');
-		$(".pad").removeClass('emptyPad');
+		$(".pad").removeClass('btn-outline-success');
+		$(".pad").removeClass('btn-outline-danger');
 	}
 
 	back(){
@@ -91,7 +112,6 @@ class UI{
 			let quantity = recipe[ingredient];
 			txt += "<div class='ms-3'>" + ingredient + ": " + quantity + "</div>";
 		}
-		console.log(txt);
 		return txt;
 		
 	}
@@ -100,21 +120,44 @@ class UI{
 		$(".window").addClass('d-none');
 		$("#samples").removeClass('d-none');
 		let txt = "<div class='text-center'><button id='back' class='verb0 btn btn-link'>back</button></div>";
+		let hideChecked = '';
+		if (this.hidingUncraftable){
+			hideChecked = ' checked ';
+		}
+		txt += "<div class='text-center'>"
+			+ "<input type='checkbox' id='hideUncraftable-" + padID + "' class='hideUncraftable' " + hideChecked + ">only show craftable"
+			+ "</div>";
 		for (let stuffID in game.config.stuff){		
-			if (!game.canYouCraftRecipe(stuffID)){
-				continue;
+			let displayClass = '';
+			if (!game.canYouCraftRecipe(stuffID) && this.hidingUncraftable){				
+				displayClass = ' d-none ';
 			}
+			let btnClass = ' btn-outline-dark ';
+			if (game.hasThisAlreadyBeenAssigned(stuffID)){
+				btnClass = ' btn-dark ';
+			}
+			txt += "<div class='uncraftable " + displayClass + "'>"
 			txt += "<div class='mt-3'>"
 			+ "<button id='sample-" + stuffID + "-" + padID
-			+ "' class='sample btn btn-lg btn-outline-dark verb2'>" + stuffID 
+			+ "' class='sample btn btn-lg verb2 " + btnClass + "'>" + stuffID 
 			+ "</button> [" 
 			+ game.config.stuff[stuffID]
 			+ "] </div>";
 			+ "<div>"
+			txt += this.showUnlocks(stuffID);
 			txt += this.showRecipe(stuffID);
 			txt += "</div>"
+			txt += "</div>";
 		}
 		$("#samples").html(txt);
+	}
+
+	showUnlocks(stuffID){		
+		
+		if (game.canThisBeUsedToUnlock(stuffID)){
+			return "<div class='ms-3 fw-bold'>unlocks next level</div>"
+		}
+		return '';
 	}
 
 	status(msg){

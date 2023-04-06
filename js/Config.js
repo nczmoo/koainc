@@ -74,7 +74,7 @@ class Config {
         bop: 0,
         la: 0,
     };
-    numberOfPads = 9; //pads are not dynamically generated    
+    numberOfPads = 27; //pads are not dynamically generated    
     
     stepUnlocks = [        
         null,

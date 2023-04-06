@@ -1,4 +1,5 @@
 class Game{
+	bank = 0;
 	config = new Config();
 	mode = 'record';	
 	playInterval = null;
@@ -6,6 +7,7 @@ class Game{
 
 	samples = [];
 	states = ['record', 'play', 'program'];
+	stepActive = null;
 	steps = [null];
 	constructor(){
 		for (let i = 0; i < this.config.numberOfPads; i++){
@@ -14,6 +16,19 @@ class Game{
 	}
 	back(){
 		ui.back();
+	}
+
+	changeBank(bankID){
+		this.bank = Number(bankID);
+	}
+
+	canThisBeUsedToUnlock(name){
+		for (let ingredient in this.config.stepUnlocks[this.steps.length]){			
+			if (ingredient == name){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	canYouUnlock(){
@@ -44,6 +59,18 @@ class Game{
 		}
 	}
 
+	hasThisAlreadyBeenAssigned(stuffID){
+		for (let i in this.samples){
+			if (stuffID == this.samples[i]){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	mute(){
+		this.config.muteAudio = !this.config.muteAudio;
+	}
 
 	pad(id){
 		if (this.mode == 'record'){
@@ -82,10 +109,13 @@ class Game{
 	}
 
 	playAudio(padID){
-		console.log(padID);
+		if (this.config.muteAudio){
+			return;
+		}
 		let filename = 'audio/' + this.samples[padID] + ".mp3";
-		console.log(filename);
+		
 		if (this.config.multiPadsPlaying){
+			//pausing audio when new audio plays sounds horrible
 			this.config.padPlaying[padID] = new Audio(filename);
 			this.config.padPlaying[padID].play();
 			return;
@@ -96,8 +126,10 @@ class Game{
 	}
 
 	playingPattern(){
-		for (let i in game.steps){
-			game.play(game.steps[i]);
+		game.play(game.steps[game.stepActive]);
+		game.stepActive++;
+		if (game.stepActive > game.steps.length - 1){
+			game.stepActive = 0;
 		}
 	}
 
@@ -108,7 +140,7 @@ class Game{
 		if (this.stopPlaying()){
 			return;
 		}
-
+		this.stepActive = 0;
 		this.playInterval = setInterval(this.playingPattern, 1000);
 		ui.status("Playing...");
 	}
