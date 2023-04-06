@@ -10,7 +10,6 @@ class UI{
 		$("#" + game.mode).addClass('btn-dark');
 		$("#" + game.mode).removeClass('btn-outline-dark');
 		for (let padID in game.samples){			
-			console.log(padID);
 			this.changePad(padID)
 			$("#pad-" + padID).prop('disabled', false);
 			if (game.samples[padID] != null){
@@ -25,7 +24,8 @@ class UI{
 			
 		}
 		let txt = '';
-		for (let i in game.steps){
+		//for (let i in game.steps){
+		for (let i = 0; i < 16; i++){
 			let stepClass = '';
 			if (game.steps[i] != null){
 				stepClass = ' programmed ';
