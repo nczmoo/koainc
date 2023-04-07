@@ -19,9 +19,10 @@ class UI{
 		$("#" + game.mode).addClass('btn-dark');
 		$("#" + game.mode).removeClass('btn-outline-dark');
 		for (let sampleID = game.bank * 9; sampleID < (game.bank + 1) * 9; sampleID++){	
-			let padID = sampleID - (game.bank * 9);			
-			this.changePad(padID)
+			let padID = sampleID - (game.bank * 9);		
 			$("#pad-" + padID).prop('disabled', false);
+	
+			this.changePad(padID)
 			$("#pad-" + padID).html('&nbsp;');
 			if (game.samples[sampleID] != null){
 				$("#pad-" + padID).html(game.samples[sampleID].trim());
@@ -51,18 +52,35 @@ class UI{
 			$("#programMenu").removeClass('d-none');
 			for (let ingredient in game.config.stepUnlocks[game.steps.length]){
 				let quantity = game.config.stepUnlocks[game.steps.length][ingredient];
-				txt += quantity + " " + ingredient + " [" 
-					+ game.config.stuff[ingredient] + "], ";
+				let doTheyHaveEnoughClass = '';
+				let haveTheyAssignedClass = '';
+				if (game.config.stuff[ingredient] >= quantity){
+					doTheyHaveEnoughClass = ' fw-bold ';
+				}
+				if (game.hasThisAlreadyBeenAssigned(ingredient)){
+					haveTheyAssignedClass = ' text-decoration-underline ';
+				}
+				txt += "<span class='" + doTheyHaveEnoughClass + haveTheyAssignedClass + "' >"
+					+ quantity + " " + ingredient + " [" 
+					+ game.config.stuff[ingredient] + "], "
+					+ "</span>";
+
 			}
 			$("#incPatternRecipe").html(txt);
 		}
 		
 		if (game.recordingStep != null){
+			$("#recordPattern").html('stop');
 			$("#recordPattern").removeClass('btn-outline-danger');
 			$("#recordPattern").addClass('btn-danger');
 		} else {
+			$("#recordPattern").html('record');
 			$("#recordPattern").addClass('btn-outline-danger');
 			$("#recordPattern").removeClass('btn-danger');
+		}
+		$("#playPattern").prop('disabled', false);
+		if (game.steps[0] == null){
+			$("#playPattern").prop('disabled', true);
 		}
 		$("#playPattern").html('play');
 		if (game.playInterval != null){
@@ -87,7 +105,15 @@ class UI{
 		let sampleID = padID + (game.bank * 9);
 		$("#pad-" + padID).removeClass('btn-outline-success');
 		$("#pad-" + padID).removeClass('btn-outline-danger');
-		if (game.mode != 'record' && game.samples[sampleID] == null){
+		$("#pad-" + padID).removeClass('btn-warning');	
+		if (game.mode != 'record' 
+			&& !Object.keys(game.config.mineable).includes(game.samples[sampleID]) 
+			&& !game.canYouCraftRecipe(game.samples[sampleID])){
+				console.log('yo', padID);
+			$("#pad-" + padID).addClass('btn-warning');	
+			$("#pad-" + padID).prop('disabled', true); //disabled is already marked false in parent function
+			return;
+		} else if (game.mode != 'record' && game.samples[sampleID] == null){
 			$("#pad-" + padID).addClass('btn-outline-danger');
 			return;
 		} else if (game.mode != 'record' && game.samples[sampleID] != null){
@@ -96,6 +122,8 @@ class UI{
 		}
 		$(".pad").removeClass('btn-outline-success');
 		$(".pad").removeClass('btn-outline-danger');
+		$(".pad").removeClass('btn-warning');	
+
 	}
 
 	back(){
@@ -110,7 +138,7 @@ class UI{
 		let recipe = game.config.recipes[stuffID];
 		for (let ingredient in recipe){
 			let quantity = recipe[ingredient];
-			txt += "<div class='ms-3'>" + ingredient + ": " + quantity + "</div>";
+			txt += "<div class='ms-3'>" + ingredient + ": " + quantity + " [" + game.config.stuff[ingredient] + "]</div>";
 		}
 		return txt;
 		

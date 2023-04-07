@@ -5,15 +5,15 @@ TODO
     X show unlock requirements in adding pad 
     X BUG: setup three steps and it's just playing the last one. I think it might be playing all of them at the same time.
     beepbeep has a slight click sound   
-    show how much you have in [] in the ingredient of craftables for record menu
-    change record to stop instead of leaving it as record when you're recording
-    when a player doesn't have the req materials to craft, it should disable the pad and turn it yellow.
-    in step unlock caption, make which ones are already assigned with underline and mark the ones you have the ingredients for with bold (something like that)
-    BUG: when pattern is clear and you press play, it just plays pad 1
-    instead of waiting for the empty spots when playing the pattern, just skip back to the begiing, (i will maybe add a silent spot later) 
+    X show how much you have in [] in the ingredient of craftables for record menu
+    X change record to stop instead of leaving it as record when you're recording
+    X when a player doesn't have the req materials to craft, it should disable the pad and turn it yellow.
+    X in step unlock caption, make which ones are already assigned with underline and mark the ones you have the ingredients for with bold (something like that)
+    X BUG: when pattern is clear and you press play, it just plays pad 1
+    X instead of waiting for the empty spots when playing the pattern, just skip back to the begiing, (i will maybe add a silent spot later) 
     display a message when you've unlocked all stops
     MAYBE: separate steps into 4/4
-    
+    X BUG: if you clear while playing, it continues playing [0];
 
 Design
     While it's mechanically interesting on a very simple level, mechanically, 

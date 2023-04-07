@@ -53,7 +53,9 @@ class Game{
 	}
 
 	clearPattern(){
-
+		if (this.playInterval != null){
+			this.stopPlaying();
+		}
 		for (let i in this.steps){
 			this.steps[i] = null;
 		}
@@ -129,7 +131,8 @@ class Game{
 	playingPattern(){
 		game.play(game.steps[game.stepActive]);
 		game.stepActive++;
-		if (game.stepActive > game.steps.length - 1){
+		if (game.stepActive > game.steps.length - 1 
+			|| game.steps[game.stepActive] == null){
 			game.stepActive = 0;
 		}
 	}
@@ -137,7 +140,7 @@ class Game{
 	playPattern(){
 		this.stopRecording();
 
-		if (this.stopPlaying()){
+		if (this.stopPlaying() || this.steps[0] == null ){
 			return;
 		}
 		this.stepActive = 0;
