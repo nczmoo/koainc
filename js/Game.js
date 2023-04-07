@@ -90,37 +90,38 @@ class Game{
 	}
 
 	play(id){		
-		if (this.samples[id] == null 
-			|| !this.canYouCraftRecipe(this.samples[id])){
+		let sampleID = Number(id) + (this.bank * 9);
+		if (this.samples[sampleID] == null 
+			|| !this.canYouCraftRecipe(this.samples[sampleID])){
 			return;
 		}		
-		this.config.stuff[this.samples[id]]++;		
-		let txt = this.samples[id] + ": " 
-		+ this.config.stuff[this.samples[id]] + " (+1)";
+		this.config.stuff[this.samples[sampleID]]++;		
+		let txt = this.samples[sampleID] + ": " 
+		+ this.config.stuff[this.samples[sampleID]] + " (+1)";
 
-		for (let ingredient in this.config.recipes[this.samples[id]]){
-			let quantity = this.config.recipes[this.samples[id]][ingredient];
+		for (let ingredient in this.config.recipes[this.samples[sampleID]]){
+			let quantity = this.config.recipes[this.samples[sampleID]][ingredient];
 			this.config.stuff[ingredient] -= quantity;
 			txt += " " + ingredient + ": " + this.config.stuff[ingredient] 
 				+ "(-"  + quantity + ")";
 		}
-		this.playAudio(id);
+		this.playAudio(sampleID);
 		ui.status(txt);
 	}
 
-	playAudio(padID){
+	playAudio(sampleID){
 		if (this.config.muteAudio){
 			return;
 		}
-		let filename = 'audio/' + this.samples[padID] + ".mp3";
-		
+		let filename = 'audio/' + this.samples[sampleID] + ".mp3";
+		/*
 		if (this.config.multiPadsPlaying){
 			//pausing audio when new audio plays sounds horrible
 			this.config.padPlaying[padID] = new Audio(filename);
 			this.config.padPlaying[padID].play();
 			return;
 		}
-
+		*/
 		this.config.audioPlaying = new Audio(filename);
 		this.config.audioPlaying.play();
 	}
@@ -134,7 +135,6 @@ class Game{
 	}
 
 	playPattern(){
-		console.log('playPattern');
 		this.stopRecording();
 
 		if (this.stopPlaying()){
@@ -150,7 +150,6 @@ class Game{
 
 		this.stopPlaying();
 		if (this.stopRecording()){
-			console.log('returning');
 			return;
 		}
 
@@ -159,8 +158,9 @@ class Game{
 
 	}
 
-	sample (stuffID, padID){				
-		this.samples[padID] = stuffID;
+	sample (stuffID, padID){					
+		padID = Number(padID);
+		this.samples[padID + (this.bank * 9)] = stuffID;
 		ui.back();		
 	}
 
@@ -175,9 +175,7 @@ class Game{
 	}
 
 	stopRecording(){
-		console.log('stop', this.recordingStep);
 		if (this.recordingStep != null){
-			console.log ('yah');
 			ui.status( this.recordingStep + "/" + this.steps.length + " steps of the pattern programmed.");
 			this.recordingStep = null;
 			return true;

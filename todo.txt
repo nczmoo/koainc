@@ -4,7 +4,32 @@ TODO
     X add mute button
     X show unlock requirements in adding pad 
     X BUG: setup three steps and it's just playing the last one. I think it might be playing all of them at the same time.
+    beepbeep has a slight click sound   
+    show how much you have in [] in the ingredient of craftables for record menu
+    change record to stop instead of leaving it as record when you're recording
+    when a player doesn't have the req materials to craft, it should disable the pad and turn it yellow.
+    in step unlock caption, make which ones are already assigned with underline and mark the ones you have the ingredients for with bold (something like that)
+    BUG: when pattern is clear and you press play, it just plays pad 1
+    instead of waiting for the empty spots when playing the pattern, just skip back to the begiing, (i will maybe add a silent spot later) 
+    display a message when you've unlocked all stops
+    MAYBE: separate steps into 4/4
+    
 
 Design
     While it's mechanically interesting on a very simple level, mechanically, 
     there becomes an issue when you run out of pads. Lets try pad banks.
+
+    When recording, should it automatically clear it or just constantly append it until it reaches the end THEN clear it?
+
+    One thing I would be an interesing angle to take the game's design is to add a 
+    rhythm element to it. It just lends itself very well to that mechanic.
+    
+    A shortcoming of the game is there is only ONE way to go forward in the game. The same path for all progression.
+
+    Another shortcoming is that as it wokrs right now, the programming is tied the UI pad buttons and not the samples, so when you go to a different bank, it'll stop playing if nothing is there
+
+    For unlocking the next step, it's relatively trivial to click once and have it unloock that step.
+
+    Also, there's not a lot of utility for unlocking a step, as it currently stands. It's actually kind of a hindrance because it's not doing anything for the empty ones.
+
+    It might be helpful to have a button automatically assign all of the resources to a pad.
